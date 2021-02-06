@@ -12,7 +12,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.Ultrasonic;
+//import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.SPI;
 
 public class Drivetrain extends SubsystemBase {
@@ -20,10 +20,10 @@ public class Drivetrain extends SubsystemBase {
   private AHRS navx = new AHRS(SPI.Port.kMXP);
   private WPI_TalonSRX leftTalon = new WPI_TalonSRX(Constants.leftDrivePort);
   private WPI_TalonSRX rightTalon = new WPI_TalonSRX(Constants.rightDrivePort);
-  private Ultrasonic ultra = new Ultrasonic(Constants.ultrasonicPort1, Constants.ultrasonicPort2);
+  //private Ultrasonic ultra = new Ultrasonic(Constants.ultrasonicPort1, Constants.ultrasonicPort2);
   private static Drivetrain drive;
 
-  private double kTicksToInches = 12 * Math.PI * (1/1440) * 3;
+  private double kTicksToInches = 6.0 * Math.PI * (1.0/1440.0);
 
   public Drivetrain() {
     //setting up left and right talons and encoders
@@ -37,8 +37,8 @@ public class Drivetrain extends SubsystemBase {
     resetEncoders();
 
     //settings for sensors (ultrasonic and gyro)
-    Ultrasonic.setAutomaticMode(true);
-    navx.zeroYaw();
+    //Ultrasonic.setAutomaticMode(true);
+    navx.reset();
   }
 
   public Drivetrain getInstance() {
@@ -59,24 +59,27 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getEncoderDistance() {
-    return (leftTalon.getSelectedSensorPosition(0) + rightTalon.getSelectedSensorPosition(0)) * 0.5 * kTicksToInches;
+    return (leftTalon.getSelectedSensorPosition(0) + rightTalon.getSelectedSensorPosition(0)) * 0.5 * kTicksToInches; // * kTicksToInches;
   }
 
   public void resetNavx() {
-    navx.zeroYaw();
+    navx.reset();
   }
 
   public double getAngle() {
-    return navx.getYaw();
+    return navx.getAngle();
   }
 
+  /*
   public double getUltraDistance() {
     return ultra.getRangeInches();
   }
+  */
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     tankDrive(RobotContainer.returnLeftJoy().getY(), RobotContainer.returnRightJoy().getY());
+    System.out.println(getAngle());
   }
 }

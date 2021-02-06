@@ -28,9 +28,9 @@ public class TurnRobot extends CommandBase {
   @Override
   public void execute() {
     if (targetAngle > 0) {
-      RobotContainer.returnDrive().tankDrive(0.5, -0.5);
+      RobotContainer.returnDrive().tankDrive(0.2, -0.2);
     } else if (targetAngle < 0) {
-      RobotContainer.returnDrive().tankDrive(-0.5, 0.5);
+      RobotContainer.returnDrive().tankDrive(-0.2, 0.2);
     }
   }
 
@@ -43,7 +43,7 @@ public class TurnRobot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(targetAngle - RobotContainer.returnDrive().getAngle()) <= 2) {
+    if (Math.abs(targetAngle - RobotContainer.returnDrive().getAngle()) <= 10) {
       return true;
     }
     return false;

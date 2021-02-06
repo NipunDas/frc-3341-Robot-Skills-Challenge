@@ -28,9 +28,9 @@ public class DriveForward extends CommandBase {
   @Override
   public void execute() {
     if (targetDistance < 0) {
-      RobotContainer.returnDrive().tankDrive(-0.5, -0.5);
+      RobotContainer.returnDrive().tankDrive(-0.3, -0.3);
     } else if (targetDistance > 0) {
-      RobotContainer.returnDrive().tankDrive(0.5, 0.5);
+      RobotContainer.returnDrive().tankDrive(0.3, 0.3);
     }
   }
 
@@ -43,7 +43,7 @@ public class DriveForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(targetDistance - RobotContainer.returnDrive().getEncoderDistance()) <= 2) {
+    if (Math.abs(targetDistance - RobotContainer.returnDrive().getEncoderDistance()) <= 10) {
       return true;
     }
     return false;
