@@ -9,13 +9,15 @@ import frc.robot.RobotContainer;
 
 public class TurnRobot extends CommandBase {
 
-  double targetAngle;
+  double targetAngle, error;
+  double kP = 0.01;
 
   /** Creates a new TurnRobot. */
   public TurnRobot(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.returnDrive().getInstance());
     targetAngle = angle;
+    error = targetAngle;
   }
 
   // Called when the command is initially scheduled.
@@ -27,11 +29,9 @@ public class TurnRobot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (targetAngle > 0) {
-      RobotContainer.returnDrive().tankDrive(0.2, -0.2);
-    } else if (targetAngle < 0) {
-      RobotContainer.returnDrive().tankDrive(-0.2, 0.2);
-    }
+    error = targetAngle - RobotContainer.returnDrive().getAngle();
+    RobotContainer.returnDrive().tankDrive(kP * error, -kP * error);
+    System.out.println("Angle: " + RobotContainer.returnDrive().getAngle());
   }
 
   // Called once the command ends or is interrupted.
@@ -43,7 +43,7 @@ public class TurnRobot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(targetAngle - RobotContainer.returnDrive().getAngle()) <= 10) {
+    if (Math.abs(error) <= 2) {
       return true;
     }
     return false;
