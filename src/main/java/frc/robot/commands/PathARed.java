@@ -14,13 +14,13 @@ public class PathARed extends SequentialCommandGroup {
   public PathARed() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new DriveForward(60), 
-                new TurnRobot(27), 
-                new DriveForward(67), 
-                new TurnRobot(-98), 
-                new DriveForward(95), 
-                new TurnRobot(71), 
-                new DriveForward(180)
+    addCommands(new DriveForward(2), 
+                new AlignBall(true), //turn clockwise for 27 degrees 
+                new DriveForward(1.7018),
+                new AlignBall(false), //turn counterclockwise for 98 degrees
+                new DriveForward(2.413), 
+                new AlignBall(true), //turn clockwise for 71 degrees
+                new DriveForward(5.2)
               );
   }
 }

@@ -26,7 +26,6 @@ public class RobotContainer {
 
   private static Joystick leftJoy = new Joystick(Constants.leftJoy);
   private static Joystick rightJoy = new Joystick(Constants.rightJoy);
-  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //Configure the button bindings
@@ -53,6 +52,7 @@ public class RobotContainer {
   public static Drivetrain returnDrive() {
     return m_drive;
   }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -60,7 +60,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     
-    m_autoCommand = new DriveForward(1);
+    m_autoCommand = new PathARed();
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
   }

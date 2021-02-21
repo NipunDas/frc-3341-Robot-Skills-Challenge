@@ -13,17 +13,19 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
-  private AHRS navx = new AHRS(SPI.Port.kMXP);
+  private static Drivetrain drive;
   private WPI_TalonSRX leftTalon = new WPI_TalonSRX(Constants.leftDrivePort);
   private WPI_TalonSRX rightTalon = new WPI_TalonSRX(Constants.rightDrivePort);
-  private WPI_TalonSRX flywheel1 = new WPI_TalonSRX(Constants.wheel1Port);
-  private WPI_TalonSRX flywheel2 = new WPI_TalonSRX(Constants.wheel2Port);
-  private static Drivetrain drive;
+  private WPI_TalonSRX intake = new WPI_TalonSRX(Constants.intakePort);
+  private WPI_TalonSRX belt = new WPI_TalonSRX(Constants.beltPort);
+  private AHRS navx = new AHRS(SPI.Port.kMXP);
 
   private double kTicksToInches = 0.152 * Math.PI * (1.0/4096.0);
+  private double threshold = 0, waitTime = 0.3, intakePower = 0.5, beltPower = 0.6, lastTime = Timer.getFPGATimestamp();
 
   public Drivetrain() {
     //setting up left and right talons and encoders
@@ -34,12 +36,12 @@ public class Drivetrain extends SubsystemBase {
     rightTalon.configFactoryDefault();
     rightTalon.setInverted(true);
     rightTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-
-    flywheel1.configFactoryDefault();
-    flywheel2.configFactoryDefault();
-    flywheel1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-    flywheel2.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
     resetEncoders();
+
+    intake.configFactoryDefault();
+    intake.setInverted(false);
+    belt.configFactoryDefault();
+    belt.setInverted(true);
 
     //resetting the gyro
     navx.reset();
@@ -71,20 +73,34 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getAngle() {
-    return navx.getAngle()%360;
+    return navx.getAngle()%360.0;
+  }
+
+  public void intakeBalls() {
+    intake.set(ControlMode.PercentOutput, intakePower);
+    if (intake.getSupplyCurrent() > threshold) {
+      belt.set(ControlMode.PercentOutput, beltPower);
+      lastTime = Timer.getFPGATimestamp();
+    } else if (Timer.getFPGATimestamp() - lastTime < waitTime) {
+      belt.set(ControlMode.PercentOutput, 0.6);
+    } else {
+      belt.set(ControlMode.PercentOutput, 0);
+    }
+  }
+
+  public void stopIntake() {
+    intake.set(ControlMode.PercentOutput, 0);
+    belt.set(ControlMode.PercentOutput, 0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    tankDrive(RobotContainer.returnLeftJoy().getY(), RobotContainer.returnRightJoy().getY());
-    System.out.println(getEncoderDistance());
-    if (RobotContainer.returnLeftJoy().getRawButton(8)) {
-      flywheel1.set(ControlMode.PercentOutput, 0.5);
-      flywheel2.set(ControlMode.PercentOutput, 0.5);
-    } else {
-      flywheel1.set(ControlMode.PercentOutput, 0);
-      flywheel2.set(ControlMode.PercentOutput, 0);
+    tankDrive(RobotContainer.returnLeftJoy().getY()*0.5, RobotContainer.returnRightJoy().getY()*0.5);
+    //System.out.println(getEncoderDistance());
+    intakeBalls();
+    if (RobotContainer.returnLeftJoy().getRawButton(10)) {
+      belt.set(ControlMode.PercentOutput, 1);
     }
   }
 }

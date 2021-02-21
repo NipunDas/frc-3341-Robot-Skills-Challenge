@@ -15,10 +15,10 @@ package frc.robot;
 public final class Constants {
 
     //talons
-    public static int leftDrivePort = 3;
-    public static int rightDrivePort = 2;
-    public static int wheel1Port = 6;
-    public static int wheel2Port = 7;
+    public static int leftDrivePort = 2;
+    public static int rightDrivePort = 3;
+    public static int intakePort = 10;
+    public static int beltPort = 12;
 
     //Joysticks and joystick buttons
     public static int leftJoy = 0;

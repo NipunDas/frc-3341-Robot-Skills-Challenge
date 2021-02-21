@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class DriveForward extends CommandBase {
 
   double targetDistance, error, power;
-  double kP = 0.17, kI = 0, kD = 0;
+  double kP = 0.5, kI = 0, kD = 0;
   double errorSum = 0;
   double dt, previousTime;
   double previousError, dE, derivative;
@@ -44,18 +44,20 @@ public class DriveForward extends CommandBase {
     power = (error*kP) + (errorSum*kI) + (derivative*kD);
     RobotContainer.returnDrive().tankDrive(power, power);
     System.out.println("Distance: " + RobotContainer.returnDrive().getEncoderDistance());
+    RobotContainer.returnDrive().intakeBalls();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     RobotContainer.returnDrive().tankDrive(0, 0);
+    RobotContainer.returnDrive().resetEncoders();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(error) <= 0.05) {
+    if (Math.abs(error) <= 0.15) {
       return true;
     }
     return false;
