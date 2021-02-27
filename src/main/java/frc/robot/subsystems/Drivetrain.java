@@ -14,6 +14,7 @@ import frc.robot.RobotContainer;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Limelight;
 
 public class Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
@@ -23,9 +24,10 @@ public class Drivetrain extends SubsystemBase {
   private WPI_TalonSRX intake = new WPI_TalonSRX(Constants.intakePort);
   private WPI_TalonSRX belt = new WPI_TalonSRX(Constants.beltPort);
   private AHRS navx = new AHRS(SPI.Port.kMXP);
+  Limelight li = new Limelight();
 
   private double kTicksToInches = 0.152 * Math.PI * (1.0/4096.0);
-  private double threshold = 0, waitTime = 0.3, intakePower = 0.5, beltPower = 0.6, lastTime = Timer.getFPGATimestamp();
+  private double threshold = 0, waitTime = 0.1, intakePower = 0.5, beltPower = 0.8, lastTime = Timer.getFPGATimestamp();
 
   public Drivetrain() {
     //setting up left and right talons and encoders
@@ -97,7 +99,7 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     tankDrive(RobotContainer.returnLeftJoy().getY()*0.5, RobotContainer.returnRightJoy().getY()*0.5);
-    //System.out.println(getEncoderDistance());
+    //System.out.println(li.getX());
     intakeBalls();
     if (RobotContainer.returnLeftJoy().getRawButton(10)) {
       belt.set(ControlMode.PercentOutput, 1);

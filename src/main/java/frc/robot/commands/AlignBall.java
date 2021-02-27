@@ -11,9 +11,10 @@ import frc.robot.RobotContainer;
 public class AlignBall extends CommandBase {
   /** Creates a new AlignBall. */
 
-  Limelight li;
+  private Limelight li;
   private double x;
-  boolean right;
+  private boolean right;
+  private double power;
 
   public AlignBall(boolean turnRight) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,16 +27,22 @@ public class AlignBall extends CommandBase {
   public void initialize() {
     li = new Limelight();
     x = li.getX();
+    System.out.println(x);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     x = li.getX();
-    if (right) {
-      RobotContainer.returnDrive().tankDrive(0.3, -0.3);
+    if (x == 0) {
+      power = 0.4;
     } else {
-      RobotContainer.returnDrive().tankDrive(-0.3, 0.3);
+      power = 0.02 * x;
+    }
+    if (right) {
+      RobotContainer.returnDrive().tankDrive(power, -power);
+    } else {
+      RobotContainer.returnDrive().tankDrive(-power, power);
     }
     RobotContainer.returnDrive().intakeBalls();
   }
@@ -49,6 +56,6 @@ public class AlignBall extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (x != 0 && Math.abs(x) < 5);
+    return (x != 0 && Math.abs(x) < 2);
   }
 }

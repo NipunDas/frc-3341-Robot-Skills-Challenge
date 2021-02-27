@@ -14,8 +14,12 @@ public class TestAuto extends SequentialCommandGroup {
   public TestAuto() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new DriveForward(3.385),
-                new TurnRobot(90),
-                new DriveForward(3.385));
+    addCommands(new DriveForward(2),
+                new TurnRobot(27),
+                new DriveForward(1.7018),
+                new TurnRobot(-98),
+                new DriveForward(2.413),
+                new TurnRobot(71),
+                new DriveForward(5.2));
   }
 }
