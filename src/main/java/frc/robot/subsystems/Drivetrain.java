@@ -27,7 +27,7 @@ public class Drivetrain extends SubsystemBase {
   Limelight li = new Limelight();
 
   private double kTicksToInches = 0.152 * Math.PI * (1.0/4096.0);
-  private double threshold = 0, waitTime = 0.1, intakePower = 0.5, beltPower = 0.8, lastTime = Timer.getFPGATimestamp();
+  private double threshold = 0, waitTime = 0.1, intakePower = 0.5, beltPower = 0.9, lastTime = Timer.getFPGATimestamp();
 
   public Drivetrain() {
     //setting up left and right talons and encoders
@@ -99,7 +99,7 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     tankDrive(RobotContainer.returnLeftJoy().getY()*0.5, RobotContainer.returnRightJoy().getY()*0.5);
-    //System.out.println(li.getX());
+    System.out.println(getAngle());
     intakeBalls();
     if (RobotContainer.returnLeftJoy().getRawButton(10)) {
       belt.set(ControlMode.PercentOutput, 1);

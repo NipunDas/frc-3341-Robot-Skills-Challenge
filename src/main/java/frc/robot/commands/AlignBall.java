@@ -37,7 +37,7 @@ public class AlignBall extends CommandBase {
     if (x == 0) {
       power = 0.4;
     } else {
-      power = 0.02 * x;
+      power = 0.4;//power = 0.02 * Math.abs(x);
     }
     if (right) {
       RobotContainer.returnDrive().tankDrive(power, -power);

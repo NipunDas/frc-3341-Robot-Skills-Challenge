@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class DriveForward extends CommandBase {
 
   double targetDistance, error, power;
-  double kP = 0.5, kI = 0, kD = 0;
+  double kP = 0.75, kI = 0, kD = 0;
   double errorSum = 0;
   double dt, previousTime;
   double previousError, dE, derivative;
